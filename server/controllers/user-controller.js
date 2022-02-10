@@ -74,20 +74,18 @@ const { signToken } = require('../utils/auth');
 
 
 const resolvers = {
-
   Query: {
-    User: async ( ) =>{
-      return User.find({username, email, password });
+    User: async () => {
+      return User.find({  username, email, password  });
+  
     },
   },
-
-  Mutation: {
-    createUser: async (parent, args ) => {
-      const user = await User.create({username, email, password});
-      const token = signToken(user);
-      return {token, user};
-
-    }
+    Mutation: {
+      createUser: async (parent, args) => {
+        const user = await User.create({ username, email, password });
+        const token = signToken(user);
+        return { token, user };
+      }
   },
   saveBook: async (parent, { bookData }, context) => {
     if(context.user){
@@ -111,28 +109,28 @@ const resolvers = {
     );
     }
   },
-  
+
 //login user
-login: async (parent, { email, password }) => {
-  const user = await User.findOne({ email });
+  login: async (parent, { email, password }) => {
+    const user = await User.findOne({ email });
 
-  if (!user) {
-    throw new AuthenticationError('No user with this email found!');
-  }
+    if (!user) {
+      throw new AuthenticationError('No user with this email found!');
+    }
 
-  const correctPw = await user.isCorrectPassword(password);
+    const correctPw = await user.isCorrectPassword(password);
 
-  if (!correctPw) {
-    throw new AuthenticationError('Incorrect password!');
-  }
+    if (!correctPw) {
+      throw new AuthenticationError('Incorrect password!');
+    }
 
-  const token = signToken(user);
-  return { token, user };
-},
+    const token = signToken(user);
+    return { token, user };
+  },
 
 
 
-};
+  };
 
 
 module.exports = resolvers;
